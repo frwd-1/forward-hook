@@ -1,0 +1,30 @@
+# Dependencies
+lib/
+node_modules/
+
+# Foundry
+foundry.lock
+.foundry/
+.vscode/
+
+
+# Compiler files
+cache/
+out/
+
+# Commonly ignored directories
+.logs/
+.ignore/
+
+# Ignores development broadcast logs
+!/broadcast
+/broadcast/*/31337/
+/broadcast/**/dry-run/
+
+# Docs
+docs/
+
+# Dotenv file
+.env
+.env.*
+!.env.example
