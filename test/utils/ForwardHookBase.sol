@@ -48,9 +48,7 @@ abstract contract ForwardHookBase is Test, Deployers {
         router.swap{value: value}(
             key,
             SwapParams({
-                zeroForOne: true,
-                amountSpecified: -int256(amountIn),
-                sqrtPriceLimitX96: TickMath.MIN_SQRT_PRICE + 1
+                zeroForOne: true, amountSpecified: -int256(amountIn), sqrtPriceLimitX96: TickMath.MIN_SQRT_PRICE + 1
             }),
             PoolSwapTest.TestSettings({takeClaims: false, settleUsingBurn: false}),
             ZERO_BYTES

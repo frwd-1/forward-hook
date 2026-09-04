@@ -33,8 +33,7 @@ contract ForwardHookLiquidityUnderwriterTest is ForwardHookBase {
         PoolId.wrap(0x0112df46117acf06ac4cfff94a0c250f2bbe0cfe4c83a69815eed28536d5f428);
 
     /// @dev the atomic arbitrage the program read to determine this trader, see frwd/src/gnome/demo
-    bytes32 internal constant DETERMINATION_TX =
-        0x6220e15127c49e5c7197be388b2eba363a1d35594a78e4825965a36b1faa9c92;
+    bytes32 internal constant DETERMINATION_TX = 0x6220e15127c49e5c7197be388b2eba363a1d35594a78e4825965a36b1faa9c92;
     uint256 internal constant DETERMINATION_BLOCK = 25327847;
 
     /// @dev the trader's next trade, tx 0x15e7f05d2ca3ccd1d7275510cc34653351011b05e43b68ac4c9b8eb4e5f7b121

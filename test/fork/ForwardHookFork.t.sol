@@ -181,10 +181,7 @@ contract ForwardHookForkTest is ForwardHookBase {
         modifyLiquidityRouter.modifyLiquidity{value: 200_000 ether}(
             key,
             ModifyLiquidityParams({
-                tickLower: lower,
-                tickUpper: upper,
-                liquidityDelta: int256(uint256(liquidity)),
-                salt: bytes32(0)
+                tickLower: lower, tickUpper: upper, liquidityDelta: int256(uint256(liquidity)), salt: bytes32(0)
             }),
             ZERO_BYTES
         );

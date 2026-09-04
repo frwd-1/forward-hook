@@ -21,6 +21,7 @@ abstract contract SubScript is AccessControl {
         bool exists;
         address[] addresses;
     }
+
     /// @notice the two halves a committed name binds together
     struct Program {
         bytes32 structureHash;
@@ -54,19 +55,16 @@ abstract contract SubScript is AccessControl {
     }
 
     /// @notice the name a program is priced under, bound from the two halves it is made of
-    function bindProgram(
-        bytes32 structureHash,
-        bytes32 logicHash
-    ) public pure returns (bytes32) {
+    function bindProgram(bytes32 structureHash, bytes32 logicHash) public pure returns (bytes32) {
         return keccak256(abi.encodePacked(structureHash, logicHash));
     }
 
     /// @notice prices a capability by the program behind it, so the fee can be rebound and audited
-    function commitProgram(
-        bytes32 structureHash,
-        bytes32 logicHash,
-        uint24 fee
-    ) public onlyRole(UNDERWRITER_ROLE) returns (bytes32 name) {
+    function commitProgram(bytes32 structureHash, bytes32 logicHash, uint24 fee)
+        public
+        onlyRole(UNDERWRITER_ROLE)
+        returns (bytes32 name)
+    {
         if (structureHash == bytes32(0) || logicHash == bytes32(0)) revert InvalidProgram();
 
         name = bindProgram(structureHash, logicHash);
@@ -84,28 +82,17 @@ abstract contract SubScript is AccessControl {
     }
 
     function _createCapability(bytes32 name, uint24 fee) internal {
-        capabilities[name] = Capability({
-            name: name,
-            fee: fee,
-            exists: true,
-            addresses: new address[](0)
-        });
+        capabilities[name] = Capability({name: name, fee: fee, exists: true, addresses: new address[](0)});
         emit CapabilityCommitted(name, fee);
     }
 
     /// @notice LPs reprice a committed capability
-    function updateCapabilityFee(
-        bytes32 name,
-        uint24 fee
-    ) public onlyRole(LP_ROLE) {
+    function updateCapabilityFee(bytes32 name, uint24 fee) public onlyRole(LP_ROLE) {
         capabilities[name].fee = fee;
     }
 
     /// @notice places an agent under a committed capability
-    function assignCapability(
-        bytes32 name,
-        address _address
-    ) public onlyRole(UNDERWRITER_ROLE) {
+    function assignCapability(bytes32 name, address _address) public onlyRole(UNDERWRITER_ROLE) {
         assignments[_address] = name;
         capabilities[name].addresses.push(_address);
         emit CapabilityAssigned(name, _address);
@@ -122,27 +109,20 @@ abstract contract SubScript is AccessControl {
     }
 
     /// @notice the halves published behind a priced capability, zero when the name was never committed
-    function programOf(
-        bytes32 name
-    ) external view returns (bytes32 structureHash, bytes32 logicHash) {
+    function programOf(bytes32 name) external view returns (bytes32 structureHash, bytes32 logicHash) {
         Program memory program = programs[name];
         return (program.structureHash, program.logicHash);
     }
 
     /// @notice the fee a held structure and logic are priced at, reverting when they bind to nothing
-    function programFee(
-        bytes32 structureHash,
-        bytes32 logicHash
-    ) external view returns (uint24) {
+    function programFee(bytes32 structureHash, bytes32 logicHash) external view returns (uint24) {
         bytes32 name = bindProgram(structureHash, logicHash);
         if (!capabilities[name].exists) revert InvalidProgram();
         return capabilities[name].fee;
     }
 
     /// @notice every agent placed under this capability
-    function capabilityAgents(
-        bytes32 name
-    ) external view returns (address[] memory) {
+    function capabilityAgents(bytes32 name) external view returns (address[] memory) {
         return capabilities[name].addresses;
     }
 
@@ -157,10 +137,7 @@ abstract contract SubScript is AccessControl {
     }
 
     /// @notice reprices the whole capability the agent is assigned to
-    function setUnderwriterFee(
-        address agent,
-        uint24 fee
-    ) external onlyRole(LP_ROLE) {
+    function setUnderwriterFee(address agent, uint24 fee) external onlyRole(LP_ROLE) {
         capabilities[assignments[agent]].fee = fee;
     }
 }
