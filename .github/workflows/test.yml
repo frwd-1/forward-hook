@@ -17,13 +17,17 @@ jobs:
       - uses: actions/checkout@v6
         with:
           persist-credentials: false
-          submodules: recursive
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
 
       - name: Show Forge version
         run: forge --version
+
+      - name: Install dependencies
+        run: |
+          forge install --no-git foundry-rs/forge-std@v1.16.2
+          forge install --no-git OpenZeppelin/uniswap-hooks@v1.2.1
 
       - name: Run Forge fmt
         run: forge fmt --check
